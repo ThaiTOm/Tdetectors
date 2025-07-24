@@ -7,3 +7,4 @@ models_src/ReID/logs
 models_src/ReID/dataset/VehicleID
 models_src/ReID/dataset/VeRi
 models_src/ReID/dataset/VRIC
+data/MTMC

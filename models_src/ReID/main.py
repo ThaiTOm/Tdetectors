@@ -121,18 +121,8 @@ if __name__ == "__main__":
 
     #### Dataset Loading       
 
-    data_train = CombinedVehicleDataset(data["vehicleID_xml_path"], data["vehicleID_root_dir"], data["vric_txt_path"], data["vric_root_dir"], is_train=True, transform=train_transform)
+    data_train = CombinedVehicleDataset(data["vehicleID_xml_path"], data["vehicleID_root_dir"], data["vric_txt_path"], data["vric_root_dir"], vehicle1M_txt_path=data["vehicle1M_txt_path"], vehicle1M_root_dir=data['vehicle1M_root_dir'], is_train=True, transform=train_transform)
     print("Dataset length:", len(data_train))
-
-    # Try to get the first item. Does this line hang?
-    print("Fetching first item...")
-    item = data_train[0]
-    print("Success! Fetched item:", item)
-
-    # Try to get another item
-    print("Fetching second item...")
-    item2 = data_train[1]
-    print("Success! Fetched second item:", item2)
     data_train = DataLoader(data_train, sampler=RandomIdentitySampler(data_train, data['BATCH_SIZE'], data['NUM_INSTANCES']), num_workers=data['num_workers_train'], batch_size = data['BATCH_SIZE'], collate_fn=train_collate_fn, pin_memory=True)#
 
 
