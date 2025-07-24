@@ -1,6 +1,6 @@
 model_arch: Baseline
 LAI: False
-n_cams: 20
+n_cams: 200
 n_views: 8
 backbone: ibn #-D
 torch_seed: 0 #0 # 3407
@@ -11,9 +11,9 @@ branch_layer: 3
 validation_period: 10
 
 ###GPU Settings
-half_precision: True 
+half_precision: True
 parallel: False
-gpu: 
+gpu: 0
 
 ####LOSSES
 mean_losses: False
@@ -41,13 +41,21 @@ gn_init: kaiming
 pretrain_ongroups: True
 
 
-# 
+#
 ##DATA
-ROOT_DIR: /mnt/DATADISK/Datasets/vehicle/VERIWILD/images/
-BATCH_SIZE: 48 #48
+vehicleID_xml_path: /home/geso/Tdetectors/models_src/ReID/dataset/VehicleID/VeRi/train_label.xml
+vehicleID_root_dir:  /home/geso/Tdetectors/models_src/ReID/dataset/VehicleID/VeRi/image_train
+
+vric_txt_path: /home/geso/Tdetectors/models_src/ReID/dataset/VRIC/vric_train.txt
+vric_root_dir: /home/geso/Tdetectors/models_src/ReID/dataset/VRIC/train_images
+
+vehicle1M_txt_path: /home/geso/Tdetectors/data/Vehicle1M/Vehicle-1M/train-test-split/train_list.txt
+vehicle1M_root_dir: /home/geso/Tdetectors/data/Vehicle1M/Vehicle-1M/image
+
+BATCH_SIZE: 128 #48
 NUM_INSTANCES: 8 #8
-num_workers_train: 8 #8
-num_workers_teste: 16
+num_workers_train: 19 #8
+num_workers_teste: 19
 
 y_length: 256
 x_length: 256
@@ -59,9 +67,9 @@ p_hflip: 0.5
 p_rerase: 0.5
 
 ####VERIWILD 3067306711 Veri776 770 Market 1501
-dataset: Veri776 #Veri776
+dataset: VRIC #Veri776
 
-n_classes: 575 #30671 #770
+n_classes: 23967 #3386
 query_dir: /home/eurico/VeRi/image_query/ #/mnt/DATADISK/Datasets/vehicle/VeRi/image_query/ #
 teste_dir: /home/eurico/VeRi/image_test/  #/mnt/DATADISK/Datasets/vehicle/VeRi/image_test/ #
 train_dir: /home/eurico/VeRi/image_train/ #/mnt/DATADISK/Datasets/vehicle/VeRi/image_train/ #
@@ -82,7 +90,7 @@ momentum: 0.9
 ###scheduler settings
 sched_name: Warm_MultiStep
 min_lr: 7.75e-5
-num_epochs: 120
+num_epochs: 10
 milestones: [40, 70, 100]
 gamma: 0.1
 warmup_factor: 0.0
@@ -96,10 +104,12 @@ gamma_ce: 0.4
 gamma_t: 0.4
 
 
-#####Experiment 
+#####Experiment
 pool: GAP   ###GeM    HMP   GAP
 pool_tripletb: GAP
 pool_trans: GAP
-linear_num: False #1024 #False or value 
+linear_num: False #1024 #False or value
 
+
+weights_pretrain: /home/geso/Tdetectors/models_src/ReID/logs/VRIC/Baseline/12/last.pt
 

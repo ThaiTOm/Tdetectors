@@ -5,11 +5,11 @@ import cv2  # Import OpenCV for image saving
 import os   # Import os for path manipulation
 
 # SOURCE_VIDEO_PATH = download_assets(VideoAssets.VEHICLES)
-SOURCE_VIDEO_PATH = "/home/geso/Tdetectors/models_src/MOT/vehicles.mp4"
+SOURCE_VIDEO_PATH = "/home/geso/Tdetectors/models_src/MOT/vehicles_2.mp4"
 from ultralytics import YOLO
 
 # model = YOLO("/home/geso/Tdetectors/models/modelVehicle/runs/train/exp/weights/best.pt")
-model = YOLO("yolo12m.pt")
+model = YOLO("yolo12n.pt")
 
 # create frame generator
 generator = sv.get_video_frames_generator(SOURCE_VIDEO_PATH)

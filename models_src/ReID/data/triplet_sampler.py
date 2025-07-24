@@ -9,6 +9,10 @@ from torch.utils.data.sampler import Sampler
 from tqdm import tqdm
 import os
 import torchvision
+from PIL import Image # <--- ADD THIS IMPORT
+import torchvision.io
+from torch.utils.data import Dataset
+import xml.etree.ElementTree as ET  # Import the XML parsing module
 
 
 def train_collate_fn(batch):
@@ -531,13 +535,6 @@ class CustomDataSet4VehicleID(Dataset):
         return img, vid, camid, 0
 
 
-import os
-import torch
-import numpy as np
-import torchvision.io
-from torch.utils.data import Dataset
-import xml.etree.ElementTree as ET  # Import the XML parsing module
-
 
 # import random # Only needed if you plan to use random.shuffle, which was commented out
 
@@ -666,12 +663,6 @@ class Dataset4VehicleID(Dataset):
         return img, vid, camid, 0
 
 
-import os
-import torch
-import torchvision
-import numpy as np
-from torch.utils.data import Dataset
-
 
 # Note: The xml.etree.ElementTree import is no longer needed.
 
@@ -778,19 +769,24 @@ class VRICDataset(Dataset):
         return img, pid, camid, 0
 
 
+
+# Ensure all necessary imports are present
+# from PIL import Image # Potentially needed if torchvision.io fails
+
 class CombinedVehicleDataset(Dataset):
     """
-    A combined PyTorch Dataset for the Thai VehicleID (XML-based) and
-    VRIC (text-based) datasets.
+    A combined PyTorch Dataset for the Thai VehicleID (XML-based),
+    VRIC (text-based), and Vehicle-1M (text-based) datasets.
 
-    This class loads data from both sources, ensures vehicle IDs are unique
-    across datasets by prefixing them (e.g., 'thai_123', 'vric_456'), and
-    creates a unified set of process IDs (PIDs) for training.
+    This class loads data from all three sources, ensures vehicle IDs are unique
+    across datasets by prefixing them (e.g., 'vehicleid_123', 'vric_456', 'vehicle1m_789'),
+    and creates a unified set of process IDs (PIDs) for training.
     """
 
     def __init__(self,
                  vehicleID_xml_path, vehicleID_root_dir,
                  vric_txt_path, vric_root_dir,
+                 vehicle1M_txt_path, vehicle1M_root_dir,  # <-- ADDED for new dataset
                  is_train=True, transform=None):
         """
         Args:
@@ -798,6 +794,8 @@ class CombinedVehicleDataset(Dataset):
             vehicleID_root_dir (string): Root directory for the Thai dataset's images.
             vric_txt_path (string): Path to the VRIC dataset's text annotation file.
             vric_root_dir (string): Root directory for the VRIC dataset's images.
+            vehicle1M_txt_path (string): Path to the Vehicle-1M dataset's text annotation file. # <-- ADDED
+            vehicle1M_root_dir (string): Root directory for the Vehicle-1M dataset's images. # <-- ADDED
             is_train (bool): Set to True for training mode. Creates PIDs for classification.
             transform (callable, optional): Optional transform to be applied on a sample.
         """
@@ -807,15 +805,24 @@ class CombinedVehicleDataset(Dataset):
         # Load data from each source
         vehicleID_data = self._load_vehicleID_data(vehicleID_xml_path, vehicleID_root_dir)
         vric_data = self._load_vric_data(vric_txt_path, vric_root_dir)
+        vehicle1M_data = self._load_vehicle1M_data(vehicle1M_txt_path, vehicle1M_root_dir)  # <-- ADDED
 
         # Combine the data
-        all_image_paths = vehicleID_data['paths'] + vric_data['paths']
-        all_labels = [f"vehicleid_{l}" for l in vehicleID_data['labels']] + \
-                     [f"vric_{l}" for l in vric_data['labels']]
-        all_cams = vehicleID_data['cams'] + vric_data['cams']
+        all_image_paths = (vehicleID_data['paths'] +
+                           vric_data['paths'] +
+                           vehicle1M_data['paths'])  # <-- ADDED
+
+        all_labels = ([f"vehicleid_{l}" for l in vehicleID_data['labels']] +
+                      [f"vric_{l}" for l in vric_data['labels']] +
+                      [f"vehicle1m_{l}" for l in vehicle1M_data['labels']])  # <-- ADDED
+
+        all_cams = (vehicleID_data['cams'] +
+                    vric_data['cams'] +
+                    vehicle1M_data['cams'])  # <-- ADDED
 
         print(f"Loaded {len(vehicleID_data['paths'])} images from VehicleID dataset.")
         print(f"Loaded {len(vric_data['paths'])} images from VRIC dataset.")
+        print(f"Loaded {len(vehicle1M_data['paths'])} images from Vehicle-1M dataset.")  # <-- ADDED
         print(f"Total images in combined dataset: {len(all_image_paths)}")
 
         self.image_paths = all_image_paths
@@ -834,10 +841,10 @@ class CombinedVehicleDataset(Dataset):
         # <<< ADDED ATTRIBUTE for compatibility with your framework >>>
         self.data_info = self.image_paths
 
-
     def _load_vehicleID_data(self, xml_path, root_dir):
         """Helper function to load data from the Thai VehicleID XML file."""
         paths, labels, cams = [], [], []
+        if not xml_path: return {'paths': [], 'labels': [], 'cams': []}
         try:
             with open(xml_path, 'r', encoding='gb2312') as f:
                 xml_string = f.read()
@@ -858,6 +865,7 @@ class CombinedVehicleDataset(Dataset):
     def _load_vric_data(self, txt_path, root_dir):
         """Helper function to load data from the VRIC text file."""
         paths, labels, cams = [], [], []
+        if not txt_path: return {'paths': [], 'labels': [], 'cams': []}
         try:
             with open(txt_path, 'r') as f:
                 for line in f:
@@ -871,25 +879,73 @@ class CombinedVehicleDataset(Dataset):
             print(f"Error loading VRIC dataset from {txt_path}: {e}")
         return {'paths': paths, 'labels': labels, 'cams': cams}
 
+    # vvvvvvvvvvvv NEW HELPER FUNCTION vvvvvvvvvvvv
+    def _load_vehicle1M_data(self, txt_path, root_dir):
+        """Helper function to load data from the Vehicle-1M text file."""
+        paths, labels, cams = [], [], []
+        if not txt_path: return {'paths': [], 'labels': [], 'cams': []}
+        try:
+            with open(txt_path, 'r') as f:
+                for line in f.readlines():
+                    line = line.strip()
+                    if not line:
+                        continue
+                    # Format: image_path vehicle_id camera_id
+                    # e.g., "28/113466.bmp 0 28"
+                    parts = line.split()
+                    if len(parts) < 3:
+                        print(f"Skipping malformed line in {txt_path}: {line}")
+                        continue
+                    img_rel_path, vehicle_id, camera_id = parts[0], parts[1], parts[2]
+
+                    full_path = os.path.join(root_dir, img_rel_path)
+                    if os.path.exists(full_path):
+                        paths.append(full_path)
+                        labels.append(vehicle_id)
+                        cams.append(int(camera_id))
+        except (FileNotFoundError, ValueError) as e:
+            print(f"Error loading Vehicle-1M dataset from {txt_path}: {e}")
+        return {'paths': paths, 'labels': labels, 'cams': cams}
+
+    # ^^^^^^^^^^^^^^ END NEW HELPER FUNCTION ^^^^^^^^^^^^^^
+
     def __len__(self):
         return len(self.image_paths)
 
     def __getitem__(self, idx):
         if torch.is_tensor(idx):
             idx = idx.tolist()
+
         img_path = self.image_paths[idx]
         pid = self.pids[idx]
         camid = self.cams[idx]
+
         try:
-            image = torchvision.io.read_image(img_path)
+            # Use Pillow to open the image, which supports .bmp and many other formats
+            pil_image = Image.open(img_path).convert('RGB')
+            # Explanation of the next steps:
+            # 1. np.array(pil_image): Convert PIL image to a NumPy array (H x W x C).
+            # 2. torch.from_numpy(...): Convert NumPy array to a PyTorch tensor.
+            # 3. .permute(2, 0, 1): Reorder dimensions from HWC to CHW (C x H x W) for PyTorch.
+            image = torch.from_numpy(np.array(pil_image)).permute(2, 0, 1)
+
         except Exception as e:
-            print(f"Error loading image: {img_path}. {e}")
-            return torch.zeros(3, 256, 128), -1, -1, 0
+            print(f"Error loading image: {img_path}. {e}. Returning a placeholder.")
+            placeholder_img = torch.zeros(3, 256, 128, dtype=torch.float32)
+            if self.transform:
+                placeholder_img = self.transform(placeholder_img)
+            return placeholder_img, -1, -1, 0
+
+        # The rest of the logic is the same as before
         pid = np.int64(pid) if self.is_train else pid
         camid = np.int64(camid)
+
+        # Scale pixel values to [0.0, 1.0]
         img_tensor = image.type(torch.FloatTensor) / 255.0
+
         if self.transform:
             img_tensor = self.transform(img_tensor)
+
         return img_tensor, pid, camid, 0
 
     def get_class(self, idx):

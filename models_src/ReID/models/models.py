@@ -530,7 +530,6 @@ def load_weights_custom(model, weights_path, new_class_num):
     model.load_state_dict(model_dict)
 
     print("\nWeights loaded successfully into the new model.")
-    print("The final classification layer(s) are randomly initialized and ready for fine-tuning.")
     print("----------------------------\n")
 
     return model

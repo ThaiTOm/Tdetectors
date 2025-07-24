@@ -49,7 +49,10 @@ vehicleID_root_dir:  /home/geso/Tdetectors/models_src/ReID/dataset/VehicleID/VeR
 vric_txt_path: /home/geso/Tdetectors/models_src/ReID/dataset/VRIC/vric_train.txt
 vric_root_dir: /home/geso/Tdetectors/models_src/ReID/dataset/VRIC/train_images
 
-BATCH_SIZE: 256 #48
+vehicle1M_txt_path: /home/geso/Tdetectors/data/Vehicle1M/Vehicle-1M/train-test-split/train_list.txt
+vehicle1M_root_dir: /home/geso/Tdetectors/data/Vehicle1M/Vehicle-1M/image
+
+BATCH_SIZE: 128 #48
 NUM_INSTANCES: 8 #8
 num_workers_train: 19 #8
 num_workers_teste: 19
@@ -66,7 +69,7 @@ p_rerase: 0.5
 ####VERIWILD 3067306711 Veri776 770 Market 1501
 dataset: VRIC #Veri776
 
-n_classes: 3386 #30671 #770
+n_classes: 23967
 query_dir: /home/eurico/VeRi/image_query/ #/mnt/DATADISK/Datasets/vehicle/VeRi/image_query/ #
 teste_dir: /home/eurico/VeRi/image_test/  #/mnt/DATADISK/Datasets/vehicle/VeRi/image_test/ #
 train_dir: /home/eurico/VeRi/image_train/ #/mnt/DATADISK/Datasets/vehicle/VeRi/image_train/ #
@@ -108,5 +111,5 @@ pool_trans: GAP
 linear_num: False #1024 #False or value
 
 
-weights_pretrain: /home/geso/Tdetectors/models_src/ReID/logs/VRIC/Baseline/0/last.pt
+weights_pretrain: /home/geso/Tdetectors/models_src/ReID/logs/VRIC/Baseline/13/last.pt
 
