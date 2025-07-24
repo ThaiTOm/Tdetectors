@@ -8,3 +8,4 @@ models_src/ReID/dataset/VehicleID
 models_src/ReID/dataset/VeRi
 models_src/ReID/dataset/VRIC
 data/MTMC
+config/global_config.yml
