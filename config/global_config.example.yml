@@ -1,0 +1,85 @@
+roboflow:
+
+    api_key:
+    api_key_upload:
+
+    cc_pintel:
+      workspace: "cc-pintel"
+      project: "car-counting"
+      version: 1
+      yolo_model: "yolov12"
+
+    vehicle_joffa:
+        workspace: "vehicle-joffa"
+        project: "vehicle-oscy8"
+        version: 1
+        yolo_model: "yolov12"
+
+    vehicle:
+      hsiang:
+        # https://universe.roboflow.com/hsiang-idaw8/taiwan-cctv/dataset/3
+        workspace: "hsiang-idaw8"
+        project: "taiwan-cctv"
+        version: 3
+        yolo_model: "yolov12"
+
+      diouck:
+        # https://universe.roboflow.com/diouck/car-wvet4/dataset/2
+        workspace: "diouck"
+        project: "car-wvet4"
+        version: 2
+        yolo_model: "yolov12"
+
+      myname:
+        # https://app.roboflow.com/myname-duqpp/road-cctv-07cwx/1
+        workspace: "myname-duqpp"
+        project: "road-cctv-07cwx"
+        version: 1
+        yolo_model: "yolov12"
+
+      cardetection:
+        # https://universe.roboflow.com/cardetection-4qozo/car-vwpkf/dataset/2
+        workspace: "cardetection-4qozo"
+        project: "car-vwpkf"
+        version: 2
+        yolo_model: "yolov12"
+
+      asdf:
+        # https://universe.roboflow.com/asdsf/cctv_detection_28/dataset/20
+        workspace: "asdsf"
+        project: "cctv_detection_28"
+        version: 20
+        yolo_model: "yolov12"
+
+      arvis:
+        # https://universe.roboflow.com/arvis/car-vide3/dataset/1
+        workspace: "arvis"
+        project: "car-vide3"
+        version: 1
+        yolo_model: "yolov12"
+
+      abtin: #https://universe.roboflow.com/abtin-nyjmt/car-nxtji/dataset/1
+        workspace: "abtin-nyjmt"
+        project: "car-nxtji"
+        version: 1
+        yolo_model: "yolov12"
+
+
+    # https://universe.roboflow.com/ev-dshfb/license-plate-w8chc
+    license_plate_w8chc:
+        workspace: "ev-dshfb"
+        project: "license-plate-w8chc"
+        version: 1
+        yolo_model: "yolov12"
+
+    # https://universe.roboflow.com/leonardo-nick-vlmvf/license-plate-7zrdm
+    license_plate_7zrdm:
+        workspace: "leonardo-nick-vlmvf"
+        project: "license-plate-7zrdm"
+        version: 1
+        yolo_model: "yolov12"
+
+huggingface:
+    api_key:
+
+
