@@ -1,8 +1,8 @@
 model_arch: Baseline
 LAI: False
-n_cams: 200
-n_views: 8
-backbone: ibn #-D
+n_cams: 174
+n_views: 0
+backbone: 101ibn #-D
 torch_seed: 0 #0 # 3407
 epoch_freeze_L1toL3: 0
 freeze_triplet_branches: 0
@@ -52,7 +52,7 @@ vric_root_dir: /home/geso/Tdetectors/models_src/ReID/dataset/VRIC/train_images
 vehicle1M_txt_path: /home/geso/Tdetectors/data/Vehicle1M/Vehicle-1M/train-test-split/train_list.txt
 vehicle1M_root_dir: /home/geso/Tdetectors/data/Vehicle1M/Vehicle-1M/image
 
-BATCH_SIZE: 128 #48
+BATCH_SIZE: 150 #48
 NUM_INSTANCES: 8 #8
 num_workers_train: 19 #8
 num_workers_teste: 19
@@ -69,7 +69,7 @@ p_rerase: 0.5
 ####VERIWILD 3067306711 Veri776 770 Market 1501
 dataset: VRIC #Veri776
 
-n_classes: 23967 #3386
+n_classes: 49725
 query_dir: /home/eurico/VeRi/image_query/ #/mnt/DATADISK/Datasets/vehicle/VeRi/image_query/ #
 teste_dir: /home/eurico/VeRi/image_test/  #/mnt/DATADISK/Datasets/vehicle/VeRi/image_test/ #
 train_dir: /home/eurico/VeRi/image_train/ #/mnt/DATADISK/Datasets/vehicle/VeRi/image_train/ #
@@ -90,7 +90,7 @@ momentum: 0.9
 ###scheduler settings
 sched_name: Warm_MultiStep
 min_lr: 7.75e-5
-num_epochs: 10
+num_epochs: 15
 milestones: [40, 70, 100]
 gamma: 0.1
 warmup_factor: 0.0
@@ -98,10 +98,10 @@ warmup_iters: 10
 warmup_method: linear
 
 
-alpha_ce: 0.6 #aka alpha
+alpha_ce: 0.8 #aka alpha
 beta_tri: 1.0  #aka beta
-gamma_ce: 0.4
-gamma_t: 0.4
+gamma_ce: 0.8
+gamma_t: 1.0
 
 
 #####Experiment
@@ -111,5 +111,5 @@ pool_trans: GAP
 linear_num: False #1024 #False or value
 
 
-weights_pretrain: /home/geso/Tdetectors/models_src/ReID/logs/VRIC/Baseline/12/last.pt
+weights_pretrain: /home/geso/Tdetectors/models/ReID/logs/VRIC/Baseline/18/last.pt
 

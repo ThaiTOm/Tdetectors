@@ -335,12 +335,12 @@ if __name__ == "__main__":
 
     # --- Model Paths ---
     YOLO_MODEL_PATH = "yolo12m"
-    REID_MODEL_PATH = "/home/geso/Tdetectors/models_src/ReID/logs/VRIC/Baseline/14/last.pt"
+    REID_MODEL_PATH = "/home/geso/Tdetectors/models/ReID/logs/VRIC/Baseline/15/last.pt"
 
     # --- Detection & Clustering Parameters ---
     DETECTION_CONFIDENCE_THRESHOLD = 0.7
     HAMMING_THRESHOLD = 10
-    DISTANCE_THRESHOLD_REID = 0.5
+    DISTANCE_THRESHOLD_REID = 0.3
 
     # --- Output Folder Names ---
     CROPPED_OBJECTS_TEMP_DIR = "temp_cropped_objects"

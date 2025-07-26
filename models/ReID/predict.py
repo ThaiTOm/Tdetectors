@@ -282,7 +282,7 @@ def save_clustered_images_for_inspection(grouped_images, output_dir="grouped_ima
 # --- Hàm main để thực thi ---
 if __name__ == "__main__":
     # --- CÁC THAM SỐ CẦN THAY ĐỔI ---
-    RAW_IMAGE_DIR = "/home/geso/Tdetectors/models_src/ReID/test"  # <<< THAY ĐỔI ĐƯỜNG DẪN NÀY (Thư mục gốc chứa tất cả ảnh)
+    RAW_IMAGE_DIR = "/home/geso/Tdetectors/models/ReID/test"  # <<< THAY ĐỔI ĐƯỜNG DẪN NÀY (Thư mục gốc chứa tất cả ảnh)
 
     # Thư mục tạm thời cho ảnh sau khi loại bỏ trùng lặp pixel
     DEDUPLICATED_PIXEL_LEVEL_DIR = "deduplicated_pixel_level"
@@ -298,8 +298,8 @@ if __name__ == "__main__":
     HAMMING_THRESHOLD = 5
 
     # Tham số cho mô hình Re-ID và phân cụm (Bước 1 & 2)
-    MODEL_PATH = "/home/geso/Tdetectors/models_src/ReID/logs/VRIC/Baseline/8/last.pt"  # <<< THAY ĐỔI ĐƯỜNG DẪN NÀY
-    CLASS_NUM = 3386  # Số lượng lớp khi huấn luyện (ví dụ Veri-776 là 776)
+    MODEL_PATH = "/home/geso/Tdetectors/models/ReID/logs/VRIC/Baseline/22/last.pt"  # <<< THAY ĐỔI ĐƯỜNG DẪN NÀY
+    CLASS_NUM = 49725  # Số lượng lớp khi huấn luyện (ví dụ Veri-776 là 776)
 
     # Ngưỡng khoảng cách cho phân cụm Re-ID (sau khi đã trích xuất đặc trưng).
     # Cần tinh chỉnh. Giá trị nhỏ hơn -> ít cụm, mỗi cụm chặt chẽ hơn.
@@ -320,7 +320,8 @@ if __name__ == "__main__":
         exit()
 
     # --- BẮT ĐẦU QUY TRÌNH ---
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = "cpu"
     print(f"Using device: {device}")
 
     # 0. Loại bỏ ảnh trùng lặp ở mức pixel/hash trước

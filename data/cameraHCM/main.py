@@ -12,7 +12,7 @@ CONFIG = {
     "EXCEL_FILE": 'DANH_SACH_CAMERA_DAY_DU_FINAL.xlsx',
     "SHEET_NAME": 'Sheet1',
     "BASE_OUTPUT_FOLDER": 'captured_images',
-    "RUN_DURATION_HOURS": 48,
+    "RUN_DURATION_HOURS": 24,
     "DOWNLOAD_INTERVAL_SECONDS": 7,
     "CAMERA_URL_TEMPLATE": "https://giaothong.hochiminhcity.gov.vn:8007/Render/CameraHandler.ashx?id={}&w=500&h=300",
 

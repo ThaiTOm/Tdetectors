@@ -3,9 +3,9 @@ data/LicensePlateDataset/License-Plate-1
 data/LicensePlateDataset/license-plate-1
 models/modelLicensePlate/runs
 models/modelVehicle/runs
-models_src/ReID/logs
-models_src/ReID/dataset/VehicleID
-models_src/ReID/dataset/VeRi
-models_src/ReID/dataset/VRIC
+models/ReID/logs
+models/ReID/dataset/VehicleID
+models/ReID/dataset/VeRi
+models/ReID/dataset/VRIC
 data/MTMC
 config/global_config.yml
