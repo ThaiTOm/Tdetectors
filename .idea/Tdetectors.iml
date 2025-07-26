@@ -5,7 +5,7 @@
       <excludeFolder url="file://$MODULE_DIR$/data/LicensePlateDataset/License-Plate-1" />
       <excludeFolder url="file://$MODULE_DIR$/data/LicensePlateDataset/license-plate-1" />
       <excludeFolder url="file://$MODULE_DIR$/data/cameraHCM/captured_images" />
-      <excludeFolder url="file://$MODULE_DIR$/models_src/ReID/logs" />
+      <excludeFolder url="file://$MODULE_DIR$/models/ReID/logs" />
     </content>
     <orderEntry type="jdk" jdkName="TDetectors" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
