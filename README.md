@@ -6,11 +6,11 @@ The project is contributed by:
 - Trần Nguyễn Sơn Thành (N22DCCN078)
 - Cao Duy Thái (N22DCCN076)
 
-Our results demo:
-<p float="left">
-  <img src="demo/images/Screenshot 2025-07-29 100652.png?raw=true" width="50%" />
-  <img src="demo/images/Screenshot 2025-07-29 101050.png?raw=true" width="50%" /> 
-</p>
+## Demo
+
+[![Watch the video](demo/images/Screenshot 2025-07-29 100652.png)](https://www.youtube.com/watch?v=AktD6WMdBYs)
+
+[![Watch the video](demo/images/Screenshot 2025-07-29 101050.png)](https://www.youtube.com/watch?v=Z6NlvcCQByA)
 
 ### **Project Overview: Multi-Camera Vehicle Tracking with OpenVINO™**
 
