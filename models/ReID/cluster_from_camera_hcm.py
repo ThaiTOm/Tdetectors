@@ -77,7 +77,7 @@ def _save_crop(args):
 def run_yolo_detection_and_crop(yolo_model,
                                      source_image_paths,
                                      output_dir,
-                                     batch_size=16,
+                                     batch_size=1,
                                      confidence_threshold=0.5,
                                      target_classes=None):
     """
@@ -239,7 +239,7 @@ def collate_fn_skip_corrupted(batch):
     return torch.stack(images, 0), list(paths)
 
 @torch.no_grad()
-def extract_features(model, image_paths, transform, device, batch_size=64):
+def extract_features(model, image_paths, transform, device, batch_size=1):
     print(f"\n--- STEP 3: Extracting Features (Optimized) ---")
     if not image_paths: return torch.tensor([]), []
     try:
@@ -335,12 +335,12 @@ if __name__ == "__main__":
 
     # --- Model Paths ---
     YOLO_MODEL_PATH = "yolo12m"
-    REID_MODEL_PATH = "/home/geso/Tdetectors/models/ReID/logs/VRIC/Baseline/15/last.pt"
+    REID_MODEL_PATH = "/home/geso/Tdetectors/models/ReID/logs/VRIC/Baseline/22/last.pt"
 
     # --- Detection & Clustering Parameters ---
     DETECTION_CONFIDENCE_THRESHOLD = 0.7
     HAMMING_THRESHOLD = 10
-    DISTANCE_THRESHOLD_REID = 0.3
+    DISTANCE_THRESHOLD_REID = 0.15
 
     # --- Output Folder Names ---
     CROPPED_OBJECTS_TEMP_DIR = "temp_cropped_objects"
@@ -358,6 +358,7 @@ if __name__ == "__main__":
         print(f"FATAL ERROR: Source data path not found -> '{CAPTURED_DATA_FOLDER}'"); exit()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    # device = "cpu"
     print(f"Using device: {device}")
 
     # --- ### MODIFIED ###: Main pipeline logic with conditional deduplication ---

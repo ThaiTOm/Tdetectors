@@ -69,7 +69,7 @@ p_rerase: 0.5
 ####VERIWILD 3067306711 Veri776 770 Market 1501
 dataset: VRIC #Veri776
 
-n_classes: 53111 #3386
+n_classes: 49725 #3386
 query_dir: /home/eurico/VeRi/image_query/ #/mnt/DATADISK/Datasets/vehicle/VeRi/image_query/ #
 teste_dir: /home/eurico/VeRi/image_test/  #/mnt/DATADISK/Datasets/vehicle/VeRi/image_test/ #
 train_dir: /home/eurico/VeRi/image_train/ #/mnt/DATADISK/Datasets/vehicle/VeRi/image_train/ #

@@ -52,7 +52,7 @@ vric_root_dir: /home/geso/Tdetectors/models_src/ReID/dataset/VRIC/train_images
 vehicle1M_txt_path: /home/geso/Tdetectors/data/Vehicle1M/Vehicle-1M/train-test-split/train_list.txt
 vehicle1M_root_dir: /home/geso/Tdetectors/data/Vehicle1M/Vehicle-1M/image
 
-BATCH_SIZE: 150 #48
+BATCH_SIZE: 100 #48
 NUM_INSTANCES: 8 #8
 num_workers_train: 19 #8
 num_workers_teste: 19
@@ -111,5 +111,5 @@ pool_trans: GAP
 linear_num: False #1024 #False or value
 
 
-weights_pretrain: /home/geso/Tdetectors/models/ReID/logs/VRIC/Baseline/18/last.pt
+weights_pretrain: /home/geso/Tdetectors/models/ReID/logs/VRIC/Baseline/22/last.pt
 
