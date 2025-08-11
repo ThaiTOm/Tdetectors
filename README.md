@@ -1,4 +1,4 @@
-# Tdetectors - Smart City Systems
+# Tdetectors - Smart City Systems - Detection, Recognition and Identification Vehicle for 1
 
 This project is a part of the Tdetectors initiative, which aims to enhance smart city systems through advanced detection and tracking technologies.
 The project is contributed by:
