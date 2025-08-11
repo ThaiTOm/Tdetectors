@@ -56,8 +56,9 @@ At this time, because of the video livestream is not supported, so we could only
 python models/ReID/cluster_from_camera_hcm.py
 ```
 
-## The result of Openvino (CPU)
-### **Tổng hợp kết quả so sánh cuối cùng trên model Detect License Plate**
+## The result of OpenVINO (CPU only)
+
+### Detection Vehicle on YOLOv12m
 
 | Chỉ số (Metric) | Mô hình gốc PyTorch (trên CPU) | Mô hình OpenVINO (trên CPU) | **Mức độ cải thiện** |
 | --- | --- | --- | --- |
@@ -68,6 +69,9 @@ python models/ReID/cluster_from_camera_hcm.py
 
 - **Cải thiện FPS:** ( (15.23 - 0.17) / 0.17 ) * 100% ≈ 8858.8%
 - **Giảm độ trễ:** ( (5720.48 - 327.33) / 5720.48 ) * 100% ≈ 94.28%
+
+### Result for Vehicle Recognition
+
 
 ## Contributing
 
