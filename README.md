@@ -56,6 +56,18 @@ At this time, because of the video livestream is not supported, so we could only
 python models/ReID/cluster_from_camera_hcm.py
 ```
 
+## The result of Openvino (CPU)
+### **Tổng hợp kết quả so sánh cuối cùng trên model Detect License Plate**
+
+| Chỉ số (Metric) | Mô hình gốc PyTorch (trên CPU) | Mô hình OpenVINO (trên CPU) | **Mức độ cải thiện** |
+| --- | --- | --- | --- |
+| **Thông lượng (Throughput)** | **0.17 FPS** | **15.23 FPS** | **~8858%** |
+| **Độ trễ trung bình (Latency)** | **5720.48 ms** | **327.33 ms** | **Giảm ~94.3%** |
+
+*Ghi chú về cách tính:*
+
+- **Cải thiện FPS:** ( (15.23 - 0.17) / 0.17 ) * 100% ≈ 8858.8%
+- **Giảm độ trễ:** ( (5720.48 - 327.33) / 5720.48 ) * 100% ≈ 94.28%
 
 ## Contributing
 
@@ -63,7 +75,4 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 Please make sure to update tests as appropriate.
 
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)
 
