@@ -7,19 +7,12 @@ The project is contributed by:
 - Cao Duy Thái (N22DCCN076)
 
 ## Demo
+[![Watch the video](demo/images/Screenshot%202025-07-29%20100652.png)](https://www.youtube.com/watch?v=AktD6WMdBYs)
 
-![Watch the video](demo/images/Screenshot%202025-07-29%20100652.png)
+[![Watch the video](demo/images/Screenshot%202025-07-29%20101050.png)](https://www.youtube.com/watch?v=Z6NlvcCQByA)
 
 
-![Watch the video](demo/images/Screenshot-2025-07-29-101050.png)
-
-![Tracking for Multi-camera Multi Object](demo/images/Screenshot-2025-07-29-120028.png)
-
-[![Watch the video](demo/images/Screenshot-2025-07-29-100652.png)](https://www.youtube.com/watch?v=AktD6WMdBYs)
-
-[![Watch the video](demo/images/Screenshot 2025-07-29 101050.png)](https://www.youtube.com/watch?v=Z6NlvcCQByA)
-
-![Tracking for Multi-camera Multi Object](demo/images/Screenshot 2025-07-29 120028.png)
+![Tracking for Multi-camera Multi Object](demo/images/Screenshot%2025-07-29%2020028.png)
 
 ### **Project Overview: Multi-Camera Vehicle Tracking with OpenVINO™**
 
