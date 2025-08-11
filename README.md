@@ -8,7 +8,8 @@ The project is contributed by:
 
 ## Demo
 
-![Watch the video](demo/images/Screenshot-2025-07-29-100652.png)
+![Watch the video](demo/images/Screenshot%202025-07-29%20100652.png)
+
 
 ![Watch the video](demo/images/Screenshot-2025-07-29-101050.png)
 
