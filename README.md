@@ -12,7 +12,7 @@ The project is contributed by:
 
 [![Watch the video](demo/images/Screenshot 2025-07-29 101050.png)](https://www.youtube.com/watch?v=Z6NlvcCQByA)
 
-[![Tracking for Multi-camera Multi Object](demo/images/Screenshot 2025-07-29 120028.png)]
+![Tracking for Multi-camera Multi Object](demo/images/Screenshot 2025-07-29 120028.png)
 
 ### **Project Overview: Multi-Camera Vehicle Tracking with OpenVINO™**
 
