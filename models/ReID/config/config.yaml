@@ -49,7 +49,7 @@ vehicleID_root_dir:  /home/geso/Tdetectors/models_src/ReID/dataset/VehicleID/VeR
 vric_txt_path: /home/geso/Tdetectors/models_src/ReID/dataset/VRIC/vric_train.txt
 vric_root_dir: /home/geso/Tdetectors/models_src/ReID/dataset/VRIC/train_images
 
-vehicle1M_txt_path: /home/geso/Tdetectors/data/Vehicle1M/Vehicle-1M/train-test-split/train_list.txt
+vehicle1M_txt_path: /home/geso/Tdetectors/data/Vehicle1M/Vehicle-1M/train-aiCity22-split/train_list.txt
 vehicle1M_root_dir: /home/geso/Tdetectors/data/Vehicle1M/Vehicle-1M/image
 
 BATCH_SIZE: 128 #48

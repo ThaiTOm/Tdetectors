@@ -282,7 +282,7 @@ def save_clustered_images_for_inspection(grouped_images, output_dir="grouped_ima
 # --- Hàm main để thực thi ---
 if __name__ == "__main__":
     # --- CÁC THAM SỐ CẦN THAY ĐỔI ---
-    RAW_IMAGE_DIR = "/home/geso/Tdetectors/models/ReID/test"  # <<< THAY ĐỔI ĐƯỜNG DẪN NÀY (Thư mục gốc chứa tất cả ảnh)
+    RAW_IMAGE_DIR = "/home/geso/Tdetectors/models/ReID/aiCity22"  # <<< THAY ĐỔI ĐƯỜNG DẪN NÀY (Thư mục gốc chứa tất cả ảnh)
 
     # Thư mục tạm thời cho ảnh sau khi loại bỏ trùng lặp pixel
     DEDUPLICATED_PIXEL_LEVEL_DIR = "deduplicated_pixel_level"

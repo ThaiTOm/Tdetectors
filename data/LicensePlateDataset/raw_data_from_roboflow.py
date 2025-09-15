@@ -28,7 +28,7 @@ def process_raw_data():
     folder_data_path = os.path.join(parent_dir, "data/LicensePlateDataset/license-plate-1")
     train_path = os.path.join(folder_data_path, "train", "labels")
     valid_path = os.path.join(folder_data_path, "valid", "labels")
-    test_path = os.path.join(folder_data_path, "test", "labels")
+    test_path = os.path.join(folder_data_path, "aiCity22", "labels")
 
     print(f"Processing raw data in {train_path} and {valid_path}")
     label_change(train_path)
@@ -57,10 +57,10 @@ def push_dataset_to_roboflow():
 
     # --- Uploading Data ---
 
-    # If your data is already split into train/valid/test subfolders within DATA_FOLDER_PATH,
+    # If your data is already split into train/valid/aiCity22 subfolders within DATA_FOLDER_PATH,
     # you can iterate and upload each split.
     # This assumes structure like: DATA_FOLDER_PATH/train/images, DATA_FOLDER_PATH/train/labels
-    splits = ["train", "valid", "test"]  # Or just the ones you have
+    splits = ["train", "valid", "aiCity22"]  # Or just the ones you have
 
     for split_name in splits:
         split_images_path = os.path.join(DATA_FOLDER_PATH, split_name, "images")

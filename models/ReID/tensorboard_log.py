@@ -84,6 +84,6 @@ if __name__ == "__main__":
     loggerwriter.write_scalars(dicttest, 6)
     loggerwriter.write_scalars({"Accuraccy/CMC1": int(101), "Accuraccy/mAP": 109}, 6)
     model = torchvision.models.resnet18(pretrained=False)
-    loggerwriter.save_model(model, 'test.pt')
+    loggerwriter.save_model(model, 'aiCity22.pt')
 
     loggerwriter.save_log()

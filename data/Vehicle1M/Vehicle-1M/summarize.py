@@ -60,11 +60,11 @@ def summarize_train_list(file_path):
 if __name__ == "__main__":
     # Simulate the file path
     # In a real scenario, you would replace this with the actual path
-    # (TDetectors) geso@ai01svr:~/Tdetectors/data/Vehicle1M/Vehicle-1M/train-test-split$
+    # (TDetectors) geso@ai01svr:~/Tdetectors/data/Vehicle1M/Vehicle-1M/train-aiCity22-split$
     current_dir = os.path.dirname(os.path.abspath(__file__)) # Get current script directory
-    # Adjust this path if your script is not in the 'train-test-split' directory
+    # Adjust this path if your script is not in the 'train-aiCity22-split' directory
     # For demonstration, let's create a dummy file
-    dummy_file_path = os.path.join(current_dir, "train-test-split/train_list.txt")
+    dummy_file_path = os.path.join(current_dir, "train-aiCity22-split/train_list.txt")
 
     print(f"Analyzing file: {dummy_file_path}")
     summary = summarize_train_list(dummy_file_path)

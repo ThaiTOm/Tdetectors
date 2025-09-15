@@ -32,7 +32,7 @@ def merge_dataset(folder_path, output_path="Car-Counting-1"):
         dt_path = os.path.join(folder_path, dt)
         if os.path.isdir(dt_path) and dt != output_path:
             print(f"Merging dataset: {dt}")
-            for split in ["train", "valid", "test"]:
+            for split in ["train", "valid", "aiCity22"]:
                 src_split_path = os.path.join(dt_path, split)
                 if os.path.exists(src_split_path):
                     dst_split_path = os.path.join(output_path, split)
