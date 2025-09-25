@@ -4,7 +4,7 @@ from torchvision import transforms
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 import numpy as np
-from data.triplet_sampler import *
+from dataset import CombinedVehicleDataset, train_collate_fn, RandomIdentitySampler
 from loss.losses import triplet_loss_fastreid
 from lr_scheduler.sche_optim import make_optimizer, make_warmup_scheduler
 import argparse
@@ -13,7 +13,7 @@ import yaml
 import os
 from tensorboard_log import Logger
 from processor import get_model, train_epoch, test_epoch 
-
+import random
 
 torch.multiprocessing.set_sharing_strategy('file_system')
 
@@ -121,8 +121,9 @@ if __name__ == "__main__":
 
     #### Dataset Loading       
 
-    data_train = CombinedVehicleDataset(data["vehicleID_xml_path"], data["vehicleID_root_dir"], data["vric_txt_path"], data["vric_root_dir"], vehicle1M_txt_path=data["vehicle1M_txt_path"], vehicle1M_root_dir=data['vehicle1M_root_dir'], is_train=True, transform=train_transform)
+    data_train = CombinedVehicleDataset(is_train=True, transform=train_transform)
     print("Dataset length:", len(data_train))
+    a + b
     data_train = DataLoader(data_train, sampler=RandomIdentitySampler(data_train, data['BATCH_SIZE'], data['NUM_INSTANCES']), num_workers=data['num_workers_train'], batch_size = data['BATCH_SIZE'], collate_fn=train_collate_fn, pin_memory=True)#
 
 
