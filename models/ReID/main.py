@@ -101,18 +101,19 @@ if __name__ == "__main__":
 
     #### Transformation augmentation
     teste_transform = transforms.Compose([
-                    transforms.Resize((data['y_length'],data['x_length']), antialias=True),
-                    transforms.Normalize(data['n_mean'], data['n_std']),
-
-    ])                  
+        transforms.Resize((data['y_length'], data['x_length']), antialias=True),
+        transforms.ToTensor(),  # <<< FIX: Add ToTensor() here
+        transforms.Normalize(data['n_mean'], data['n_std']),
+    ])
     train_transform = transforms.Compose([
-                    transforms.Resize((data['y_length'],data['x_length']), antialias=True),
-                    transforms.Pad(10),
-                    transforms.RandomCrop((data['y_length'], data['x_length'])),
-                    transforms.RandomHorizontalFlip(p=data['p_hflip']),
-                    transforms.Normalize(data['n_mean'], data['n_std']),
-                    transforms.RandomErasing(p=data['p_rerase'], value=0),
-    ])        
+        transforms.Resize((data['y_length'], data['x_length']), antialias=True),
+        transforms.Pad(10),
+        transforms.RandomCrop((data['y_length'], data['x_length'])),
+        transforms.RandomHorizontalFlip(p=data['p_hflip']),
+        transforms.ToTensor(),  # <<< FIX: Add ToTensor() here
+        transforms.Normalize(data['n_mean'], data['n_std']),
+        transforms.RandomErasing(p=data['p_rerase'], value=0),
+    ])
 
     ### Forcce a GPU
     if not data['parallel']:  
@@ -123,7 +124,7 @@ if __name__ == "__main__":
 
     data_train = CombinedVehicleDataset(is_train=True, transform=train_transform)
     print("Dataset length:", len(data_train))
-    a + b
+    
     data_train = DataLoader(data_train, sampler=RandomIdentitySampler(data_train, data['BATCH_SIZE'], data['NUM_INSTANCES']), num_workers=data['num_workers_train'], batch_size = data['BATCH_SIZE'], collate_fn=train_collate_fn, pin_memory=True)#
 
 

@@ -11,8 +11,8 @@ branch_layer: 3
 validation_period: 10
 
 ###GPU Settings
-half_precision: True
-parallel: False
+half_precision: False
+parallel: True 
 gpu: 0
 
 ####LOSSES
@@ -52,10 +52,10 @@ vric_root_dir: /home/geso/Tdetectors/models_src/ReID/dataset/VRIC/train_images
 vehicle1M_txt_path: /home/geso/Tdetectors/data/Vehicle1M/Vehicle-1M/train-aiCity22-split/train_list.txt
 vehicle1M_root_dir: /home/geso/Tdetectors/data/Vehicle1M/Vehicle-1M/image
 
-BATCH_SIZE: 4 #48
-NUM_INSTANCES: 4 #8
-num_workers_train: 90 #8
-num_workers_teste: 90
+BATCH_SIZE: 128 #48
+NUM_INSTANCES: 8 #8
+num_workers_train: 100 #8
+num_workers_teste: 100
 
 y_length: 256
 x_length: 256
@@ -82,15 +82,15 @@ train_keypoint: /home/eurico/VeRi/keypoint_orient_train.txt
 
 ### Define an optimizer settings
 optimizer: Adam #Adam SGD
-lr: 0.001 #3.5e-5 original Adam 0.0001
+lr: 0.005   #3.5e-5 original Adam 0.0001
 weight_decay:  0.0005
 bias_lr_factor: 1
 momentum: 0.9
 
 ###scheduler settings
-sched_name: Warm_MultiStep
+sched_name:  Warm_MultiStep
 min_lr: 7.75e-5
-num_epochs: 2
+num_epochs: 20
 milestones: [40, 70, 100]
 gamma: 0.1
 warmup_factor: 0.0
@@ -110,6 +110,4 @@ pool_tripletb: GAP
 pool_trans: GAP
 linear_num: False #1024 #False or value
 
-
-weights_pretrain: /home/geso/Tdetectors/models/ReID/logs/VRIC/Baseline/22/last.pt
-
+weights_pretrain: /home/geso/Tdetectors/models/ReID/logs/VRIC/Baseline/30/last.pt

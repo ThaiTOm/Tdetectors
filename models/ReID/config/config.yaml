@@ -12,7 +12,7 @@ validation_period: 10
 
 ###GPU Settings
 half_precision: True
-parallel: False
+parallel: True 
 gpu: 0
 
 ####LOSSES
@@ -111,5 +111,5 @@ pool_trans: GAP
 linear_num: False #1024 #False or value
 
 
-weights_pretrain: /home/geso/Tdetectors/models_src/ReID/logs/VRIC/Baseline/12/last.pt
+weights_pretrain: None
 
