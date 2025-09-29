@@ -125,7 +125,12 @@ if __name__ == "__main__":
     data_train = CombinedVehicleDataset(is_train=True, transform=train_transform)
     print("Dataset length:", len(data_train))
     
-    data_train = DataLoader(data_train, sampler=RandomIdentitySampler(data_train, data['BATCH_SIZE'], data['NUM_INSTANCES']), num_workers=data['num_workers_train'], batch_size = data['BATCH_SIZE'], collate_fn=train_collate_fn, pin_memory=True)#
+    data_train = DataLoader(data_train,
+                            sampler=RandomIdentitySampler(data_train, data['BATCH_SIZE'], data['NUM_INSTANCES']),
+                            num_workers=data['num_workers_train'],
+                            batch_size = data['BATCH_SIZE'],
+                            collate_fn=train_collate_fn,
+                            pin_memory=True)#
 
 
 
@@ -215,10 +220,16 @@ if __name__ == "__main__":
             print("\nUnfrozen Backbone before branches!")
         
         ###step schedule
-        if epoch >= data['epoch_freeze_L1toL3']-1:              
-            scheduler.step()    
+        # if epoch >= data['epoch_freeze_L1toL3']-1:
+        #     scheduler.step()
         ### Train Loop
         train_loss, c_loss, t_loss, alpha_ce, beta_tri = train_epoch(model, device, data_train, loss_fn, metric_loss, optimizer, data, alpha_ce, beta_tri, logger, epoch, scheduler, scaler)
+
+        if scheduler is not None:
+            # The condition 'epoch >= data['epoch_freeze_L1toL3']-1' is still relevant if you only want the scheduler to start after a certain point.
+            if epoch >= data['epoch_freeze_L1toL3'] - 1:
+                scheduler.step()
+
         ###Evaluation
         if epoch%data['validation_period']==0 or epoch>=data['num_epochs']-15:
             print('\n EPOCH {}/{} \t train loss {} \t Classification loss {} \t Triplet loss {}'.format(epoch + 1, data['num_epochs'], train_loss, c_loss, t_loss,))

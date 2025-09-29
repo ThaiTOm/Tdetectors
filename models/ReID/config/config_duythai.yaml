@@ -52,7 +52,7 @@ vric_root_dir: /home/geso/Tdetectors/models_src/ReID/dataset/VRIC/train_images
 vehicle1M_txt_path: /home/geso/Tdetectors/data/Vehicle1M/Vehicle-1M/train-aiCity22-split/train_list.txt
 vehicle1M_root_dir: /home/geso/Tdetectors/data/Vehicle1M/Vehicle-1M/image
 
-BATCH_SIZE: 128 #48
+BATCH_SIZE: 200 #48
 NUM_INSTANCES: 8 #8
 num_workers_train: 100 #8
 num_workers_teste: 100
@@ -82,7 +82,7 @@ train_keypoint: /home/eurico/VeRi/keypoint_orient_train.txt
 
 ### Define an optimizer settings
 optimizer: Adam #Adam SGD
-lr: 0.005   #3.5e-5 original Adam 0.0001
+lr: 0.0005   #3.5e-5 original Adam 0.0001
 weight_decay:  0.0005
 bias_lr_factor: 1
 momentum: 0.9
