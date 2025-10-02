@@ -285,11 +285,13 @@ class base_branches(nn.Module):
         return x
     
 class multi_branches(nn.Module):
-    def __init__(self, n_branches, n_groups, pretrain_ongroups=True, end_bot_g=False, group_conv_mhsa=False, group_conv_mhsa_2=False, x2g = False, x4g=False):
+    def __init__(self, n_branches, n_groups,layer4_block, pretrain_ongroups=True, end_bot_g=False, group_conv_mhsa=False, group_conv_mhsa_2=False, x2g = False, x4g=False):
         super(multi_branches, self).__init__()
 
-        model_ft = torch.hub.load('XingangPan/IBN-Net', 'resnet50_ibn_a', pretrained=True)
-        model_ft= model_ft.layer4
+        # model_ft = torch.hub.load('XingangPan/IBN-Net', 'resnet50_ibn_a', pretrained=True)
+        # model_ft= model_ft.layer4
+        model_ft = layer4_block
+
         self.x2g = x2g
         self.x4g = x4g
         if n_groups > 0:
@@ -451,12 +453,30 @@ class FinalLayer(nn.Module):
         return preds, embs, ffs
 
     
-class MBR_model(nn.Module):         
-    def __init__(self, class_num, n_branches, n_groups, losses="LBS", backbone="ibn", droprate=0, linear_num=False, return_f = True, circle_softmax=False, pretrain_ongroups=True, end_bot_g=False, group_conv_mhsa=False, group_conv_mhsa_2=False, x2g=False, x4g=False, LAI=False, n_cams=0, n_views=0):
-        super(MBR_model, self).__init__()  
+class MBR_model(nn.Module):
+    def __init__(self, class_num, n_branches, n_groups, losses="LBS", backbone="ibn", droprate=0, linear_num=False,
+                 return_f=True, circle_softmax=False, pretrain_ongroups=True, end_bot_g=False, group_conv_mhsa=False,
+                 group_conv_mhsa_2=False, x2g=False, x4g=False, LAI=False, n_cams=0, n_views=0):
+        super(MBR_model, self).__init__()
 
-        self.modelup2L3 = base_branches(backbone=backbone)
-        self.modelL4 = multi_branches(n_branches=n_branches, n_groups=n_groups, pretrain_ongroups=pretrain_ongroups, end_bot_g=end_bot_g, group_conv_mhsa=group_conv_mhsa, group_conv_mhsa_2=group_conv_mhsa_2, x2g=x2g, x4g=x4g)
+        full_backbone = torch.hub.load('XingangPan/IBN-Net', 'resnet101_ibn_a', pretrained=True)
+        layer4 = full_backbone.layer4
+
+
+        self.modelup2L3 = nn.Sequential(*(list(full_backbone.children())[:-3]))
+        
+        self.modelL4 = multi_branches(
+            n_branches=n_branches,
+            n_groups=n_groups,
+            layer4_block=layer4,  # Pass the correct layer here!
+            pretrain_ongroups=pretrain_ongroups,
+            end_bot_g=end_bot_g,
+            group_conv_mhsa=group_conv_mhsa,
+            group_conv_mhsa_2=group_conv_mhsa_2,
+            x2g=x2g,
+            x4g=x4g
+        )
+
         self.finalblock = FinalLayer(class_num=class_num, n_branches=n_branches, n_groups=n_groups, losses=losses, droprate=droprate, linear_num=linear_num, return_f=return_f, circle_softmax=circle_softmax, LAI=LAI, n_cams=n_cams, n_views=n_views, x2g=x2g, x4g=x4g)
         
 

@@ -128,7 +128,11 @@ def train_epoch(model, device, dataloader, loss_fn, triplet_loss, optimizer, dat
     stepcount = 0
 
     ### DDP MODIFICATION ###: Disable the main progress bar for non-main processes.
-    main_pbar = tqdm(dataloader, desc=f'Epoch {epoch + 1} (%)', bar_format='{l_bar}{bar:20}{r_bar}',
+    num_batches = len(dataloader)
+    main_pbar = tqdm(dataloader,
+                     total=num_batches,  # <-- Manually provide the total
+                     desc=f'Epoch {epoch + 1} (%)',
+                     bar_format='{l_bar}{bar:20}{r_bar}',
                      disable=(rank != 0))
 
     for image_batch, label, cam, view in main_pbar:

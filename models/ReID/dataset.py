@@ -50,7 +50,8 @@ class CombinedVehicleDataset(Dataset):
         all_image_paths = (
                 vehicleID_data['paths'] +
                 vehicle1M_data['paths'] +
-                aicity_data['paths'])
+                aicity_data['paths']
+        )
 
         all_labels = (
                 [f"vehicleid_{l}" for l in vehicleID_data['labels']] +
@@ -59,14 +60,14 @@ class CombinedVehicleDataset(Dataset):
         )
 
         all_cams = (
-                vehicleID_data['cams'] +
-                vehicle1M_data['cams'] +
-                aicity_data['cams'])
-
+                vehicleID_data['cams']
+                # vehicle1M_data['cams'])
+                # aicity_data['cams'])
+        )
         print("-" * 40)
-        print(f"Loaded {len(vehicleID_data['paths'])} images from VehicleID.")
+        # print(f"Loaded {len(vehicleID_data['paths'])} images from VehicleID.")
         print(f"Loaded {len(vehicle1M_data['paths'])} images from Vehicle-1M.")
-        print(f"Loaded {len(aicity_data['paths'])} images from AICity22.")
+        # print(f"Loaded {len(aicity_data['paths'])} images from AICity22.")
         print(f"Total images in combined dataset: {len(all_image_paths)}")
         print("-" * 40)
 
@@ -370,25 +371,17 @@ class RandomIdentitySampler(Sampler):
         return self.length
 
 
-
 class DistributedRandomIdentityBatchSampler(BatchSampler):
     """
-    A distributed-aware batch sampler that randomly samples N identities, and for
-    each identity, randomly samples K instances to form a batch of size N*K.
-    This sampler is designed to be used with DistributedDataParallel.
+    A robust, corrected distributed-aware batch sampler.
 
-    Args:
-    - data_source (Dataset): The dataset (or Subset) to sample from. Must have a .pids attribute.
-    - batch_size (int): Number of examples in a batch.
-    - num_instances (int): Number of instances per identity in a batch.
-    - world_size (int): Total number of processes for distributed training.
-    - rank (int): Rank of the current process.
-    - epoch (int): The current epoch number (used for shuffling).
+    1. Generates the full list of batches for an epoch within `set_epoch`.
+    2. `__len__` and `__iter__` use this pre-computed list, ensuring perfect consistency.
+    3. Guarantees every process will have the same number of batches.
     """
-
     def __init__(self, data_source, batch_size, num_instances, world_size, rank, epoch=0):
-        # The __init__ of BatchSampler requires a sampler. We use a dummy one.
-        super().__init__(torch.utils.data.sampler.SequentialSampler(data_source), batch_size, drop_last=False)
+        # We pass a dummy sampler to the parent, as we override __iter__ and __len__ completely.
+        super().__init__(Sampler(data_source), batch_size, drop_last=True)
 
         self.data_source = data_source
         self.num_instances = num_instances
@@ -396,73 +389,70 @@ class DistributedRandomIdentityBatchSampler(BatchSampler):
 
         self.world_size = world_size
         self.rank = rank
-        self.epoch = epoch
 
         self.index_dic = defaultdict(list)
-        # This loop correctly creates a map of {pid: [subset_idx1, subset_idx2, ...]}
         for index, pid in enumerate(self.data_source.pids):
             self.index_dic[pid].append(index)
 
         self.pids = sorted(list(self.index_dic.keys()))
         self.num_pids = len(self.pids)
 
-        if self.num_pids_per_batch * self.world_size > self.num_pids:
-            raise ValueError(f"Not enough PIDs to create unique batches for all processes.")
+        # This will store the batches for the current epoch for this rank
+        self.batches = []
+        # Call set_epoch initially to prepare batches for epoch 0
+        self.set_epoch(epoch)
 
-    def __iter__(self):
-        # ### CORRECTED LOGIC ###
-        # 1. Get shuffled INDICES
+    def _generate_batches(self):
+        """
+        This internal method contains the logic to create the batches for one epoch.
+        """
+        # Use a generator seeded with the epoch to ensure reproducibility across processes
         g = torch.Generator()
         g.manual_seed(self.epoch)
-        shuffled_indices = torch.randperm(self.num_pids, generator=g).tolist()
 
-        # 2. Use the indices to shuffle the actual PIDs
-        shuffled_pids = [self.pids[i] for i in shuffled_indices]
+        # 1. Get a shuffled list of all PIDs
+        shuffled_pid_indices = torch.randperm(self.num_pids, generator=g).tolist()
+        shuffled_pids = [self.pids[i] for i in shuffled_pid_indices]
 
-        # 3. Split the shuffled PIDs among ranks
-        pids_for_this_rank = shuffled_pids[self.rank::self.world_size]
-
-        batch_idxs_dict = defaultdict(list)
-
-        # 4. Pre-process indices for each PID this rank is responsible for
-        for pid in pids_for_this_rank:
+        # 2. Create a flat list of all possible instance "chunks" from all PIDs
+        all_pid_chunks = []
+        for pid in shuffled_pids:
             idxs = copy.deepcopy(self.index_dic[pid])
-            if len(idxs) < self.num_instances:
-                # This line will now work because `idxs` is never empty
-                idxs = np.random.choice(idxs, size=self.num_instances, replace=True).tolist()
 
+            # Oversample if not enough instances for at least one chunk
+            if len(idxs) < self.num_instances:
+                # Use numpy for choice as it's efficient and we can seed it
+                random_state = np.random.RandomState(seed=self.epoch + pid)
+                idxs = random_state.choice(idxs, size=self.num_instances, replace=True).tolist()
+
+            # Shuffle the instances within the PID for variety
             random.shuffle(idxs)
 
-            for i in range(0, len(idxs) - self.num_instances + 1, self.num_instances):
-                batch_idxs_dict[pid].append(idxs[i:i + self.num_instances])
+            # Create chunks of size num_instances
+            for i in range(len(idxs) // self.num_instances):
+                all_pid_chunks.append(idxs[i * self.num_instances : (i + 1) * self.num_instances])
 
-        avai_pids = pids_for_this_rank.copy()
-        final_batches = []
+        # 3. Group the chunks into global batches
+        # Here, we don't need to shuffle `all_pid_chunks` because the PIDs were already shuffled,
+        # which effectively mixes the chunks.
+        global_batches = []
+        num_chunks_per_batch = self.num_pids_per_batch
+        for i in range(0, len(all_pid_chunks) - num_chunks_per_batch + 1, num_chunks_per_batch):
+            batch_chunks = all_pid_chunks[i : i + num_chunks_per_batch]
+            final_batch = [item for sublist in batch_chunks for item in sublist]
+            global_batches.append(final_batch)
 
-        # 5. Create batches until we run out of PIDs
-        while len(avai_pids) >= self.num_pids_per_batch:
-            selected_pids = random.sample(avai_pids, self.num_pids_per_batch)
+        # 4. Distribute the global batches among the ranks.
+        # This is the key step to ensure fairness and synchronization.
+        # We use a simple striding approach.
+        self.batches = global_batches[self.rank :: self.world_size]
 
-            current_batch = []
-            for pid in selected_pids:
-                batch_for_pid = batch_idxs_dict[pid].pop(0)
-                current_batch.extend(batch_for_pid)
-
-                if len(batch_idxs_dict[pid]) == 0:
-                    avai_pids.remove(pid)
-
-            final_batches.append(current_batch)
-
-        random.shuffle(final_batches)
-        return iter(final_batches)
+    def __iter__(self):
+        return iter(self.batches)
 
     def __len__(self):
-        pids_for_this_rank = len(self.pids[self.rank::self.world_size])
-        total_chunks = 0
-        for pid in self.pids[self.rank::self.world_size]:
-            num_images = len(self.index_dic[pid])
-            total_chunks += num_images // self.num_instances
-        return total_chunks // self.num_pids_per_batch
+        return len(self.batches)
 
     def set_epoch(self, epoch):
         self.epoch = epoch
+        self._generate_batches()

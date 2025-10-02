@@ -1,17 +1,17 @@
-model_arch: Baseline
+model_arch: Hybrid_4B
 LAI: False
-n_cams: 174
+n_cams: 1740
 n_views: 0
 backbone: 101ibn #-D
-torch_seed: 0 #0 # 3407
+torch_seed: 2004 #0 # 3407
 epoch_freeze_L1toL3: 0
 freeze_triplet_branches: 0
 freeze_backbone_warmup: False  ## for circle
-branch_layer: 3
+branch_layer: 5
 validation_period: 10
 
 ###GPU Settings
-half_precision: False
+half_precision: True
 parallel: True 
 gpu: 0
 
@@ -54,14 +54,15 @@ vehicle1M_root_dir: /home/geso/Tdetectors/data/Vehicle1M/Vehicle-1M/image
 
 BATCH_SIZE: 200 #48
 NUM_INSTANCES: 8 #8
-num_workers_train: 100 #8
-num_workers_teste: 100
+num_workers_train: 64 #8
+num_workers_teste: 64
+
 
 y_length: 256
 x_length: 256
 
-n_mean: [0.5, 0.5, 0.5]
-n_std: [0.5, 0.5, 0.5]
+n_mean: [0.485, 0.456, 0.406]
+n_std: [0.229, 0.224, 0.225]
 
 p_hflip: 0.5
 p_rerase: 0.5
@@ -69,7 +70,7 @@ p_rerase: 0.5
 ####VERIWILD 3067306711 Veri776 770 Market 1501
 dataset: VRIC #Veri776
 
-n_classes: 63348
+n_classes: 50000
 query_dir: /home/eurico/VeRi/image_query/ #/mnt/DATADISK/Datasets/vehicle/VeRi/image_query/ #
 teste_dir: /home/eurico/VeRi/image_test/  #/mnt/DATADISK/Datasets/vehicle/VeRi/image_test/ #
 train_dir: /home/eurico/VeRi/image_train/ #/mnt/DATADISK/Datasets/vehicle/VeRi/image_train/ #
@@ -82,7 +83,7 @@ train_keypoint: /home/eurico/VeRi/keypoint_orient_train.txt
 
 ### Define an optimizer settings
 optimizer: Adam #Adam SGD
-lr: 0.0005   #3.5e-5 original Adam 0.0001
+lr: 0.0003   #3.5e-5 original Adam 0.0001
 weight_decay:  0.0005
 bias_lr_factor: 1
 momentum: 0.9
@@ -93,7 +94,7 @@ min_lr: 7.75e-5
 num_epochs: 20
 milestones: [40, 70, 100]
 gamma: 0.1
-warmup_factor: 0.0
+warmup_factor: 0.01
 warmup_iters: 10
 warmup_method: linear
 
@@ -110,4 +111,4 @@ pool_tripletb: GAP
 pool_trans: GAP
 linear_num: False #1024 #False or value
 
-weights_pretrain: /home/geso/Tdetectors/models/ReID/logs/VRIC/Baseline/30/last.pt
+weights_pretrain: None

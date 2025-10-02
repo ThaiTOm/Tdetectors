@@ -1,0 +1,49 @@
+# Configuration for training ViT on the combined VehicleID, Vehicle-1M, and AICity22 datasets.
+
+# --- Model & Training Settings ---
+torch_seed: 42
+num_epochs: 100 # You may need more epochs for a larger dataset
+half_precision: True
+save_period: 5
+
+# --- DATASET PATHS ---
+# !!! IMPORTANT: EDIT THESE PATHS TO MATCH YOUR SYSTEM !!!
+# To disable a dataset, you can either comment out its paths or set them to empty strings.
+# Example: vehicleID_list_path: ""
+
+# VehicleID Dataset
+vehicleID_list_path: /home/geso/Tdetectors/data/VehicleID/VehicleID_V1.0/train_test_split/train_list.txt
+vehicleID_root_dir:  /home/geso/Tdetectors/data/VehicleID/VehicleID_V1.0/image
+
+# Vehicle-1M Dataset
+vehicle1M_txt_path: /home/geso/Tdetectors/data/Vehicle1M/Vehicle-1M/train-test-split/train_list.txt
+vehicle1M_root_dir: /home/geso/Tdetectors/data/Vehicle1M/Vehicle-1M/image
+
+# AICity22 Dataset
+aicity_root_path: /home/geso/Tdetectors/data/aiCity22
+aicity_crop_dir: /home/geso/Tdetectors/data/aiCity22/crops # IMPORTANT: This is a cache directory.
+aicity_split: 'train' # Can be 'train' or 'test'
+
+# --- Dataloader Settings ---
+BATCH_SIZE: 256
+num_workers_train: 20
+
+# --- Image Augmentation ---
+y_length: 224
+x_length: 224
+p_hflip: 0.5
+p_rerase: 0.5
+n_mean: [0.485, 0.456, 0.406]
+n_std: [0.229, 0.224, 0.225]
+
+# --- Loss Function Settings ---
+label_smoothing: 0.1
+
+# --- Optimizer & Scheduler ---
+optimizer: AdamW
+lr: 0.0003
+weight_decay: 0.01
+
+sched_name: MultiStep
+milestones: [40, 65] # Decay LR later for a larger dataset
+gamma: 0.1
